@@ -25,6 +25,7 @@ class EOGrade(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     acadmic_year = db.Column(db.Integer, nullable=False, default='2021')
     info = db.Column(db.Text, nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=True)
     #eostudent_list = db.relationship("EOStudent", backref="eoclass", lazy=True)
 
     #Student
@@ -35,13 +36,14 @@ class EOStudent(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), unique=False, nullable=False)
-    email_id = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
     gender = db.Column(db.String(120), nullable=False,default='NA')
     dob = db.Column(db.Date(), nullable=True, default='2020-01-01')
     password = db.Column(db.String(60), nullable=False)
     unique_face_byte = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(20), nullable=False, default='default.jpg')
     is_active = db.Column(db.Boolean, nullable=False, default=True)
+    is_admin = db.Column(db.Boolean, nullable=False, default=True)
     
     eograde_id = db.Column(db.Integer, db.ForeignKey(
         "eograde.id"), nullable=False)

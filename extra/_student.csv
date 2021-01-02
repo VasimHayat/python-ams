@@ -1,4 +1,4 @@
-name,email_id,gender,dob,password,eograde_id
+name,email,gender,dob,password,eograde_id
 Aman Shah,aman@gmail.com,M,2005-01-01,user123,12
 Ankit Pandey,ankit@gmail.com,M,2005-03-03,user123,12
 Charu Mishra,charu@yahoo.com,F,2006-02-01,user123,12
