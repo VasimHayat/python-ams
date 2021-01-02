@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="container-fluid">
+     
     <div class="content-section">
 
         {% with messages = get_flashed_messages() %}
@@ -58,5 +60,6 @@
         <small class="text-muted">
             Need An Account? <a class="ml-2" href="{{ url_for('auth.register') }}">Sign Up Now</a>
         </small>
+    </div>
     </div>
 {% endblock content %}

@@ -2,10 +2,12 @@
 from datetime import date ,datetime
 from ams import db ,login_manager 
 from flask_login import UserMixin
+from flask_login._compat import unicode
 
 @login_manager.user_loader
-def load_user(user_id):
-    return EOAdminUser.query.get(int(user_id))
+def load_user(user_id): 
+    return EOStudent.query.get(int(user_id))
+ 
 
 
 #Admin User
@@ -15,6 +17,7 @@ class EOAdminUser(db.Model,UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=True)
 
 
 #Session class
@@ -25,13 +28,12 @@ class EOGrade(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     acadmic_year = db.Column(db.Integer, nullable=False, default='2021')
     info = db.Column(db.Text, nullable=False)
-    is_admin = db.Column(db.Boolean, nullable=False, default=True)
     #eostudent_list = db.relationship("EOStudent", backref="eoclass", lazy=True)
 
     #Student
 
 
-class EOStudent(db.Model):
+class EOStudent(db.Model,UserMixin):
     __tablename__ = 'eostudent'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -42,12 +44,16 @@ class EOStudent(db.Model):
     password = db.Column(db.String(60), nullable=False)
     unique_face_byte = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(20), nullable=False, default='default.jpg')
-    is_active = db.Column(db.Boolean, nullable=False, default=True)
-    is_admin = db.Column(db.Boolean, nullable=False, default=True)
+    inactive = db.Column(db.Boolean, nullable=False, default=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False) 
     
     eograde_id = db.Column(db.Integer, db.ForeignKey(
         "eograde.id"), nullable=False)
     #eoattendance_list = db.relationship("EOAttendance", backref="eostudent", lazy=True)
+    
+    def is_face_uiid_configured(self):
+        return  self.unique_face_byte is not None
+     
 
 
 class EOAttendance (db.Model):

@@ -1,9 +1,9 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint,session,abort
 from flask_login import login_user, logout_user, current_user, login_required
 
 # from ams import app
 from ams.forms import RegistrationForm, LoginForm
-from ams.models import EOAdminUser
+from ams.models import EOAdminUser,EOStudent
 
 
 auth = Blueprint("auth", __name__) 
@@ -24,24 +24,32 @@ def index():
 
 
 @auth.route("/login", methods=["GET", "POST"])
-def login():
+def login():  
     if current_user.is_authenticated:
-        return redirect(url_for("main.home"))
+        return redirect(url_for("users.home"))
     form = LoginForm()
     if form.validate_on_submit():
-        user = EOAdminUser.query.filter_by(email=form.email.data).first()
+        user = EOStudent.query.filter_by(email=form.email.data).first()
+         
+      
         if user and user.password == form.password.data:
-            login_user(user, remember=form.remember.data)
-            next_page = request.args.get("next")
+            login_user(user,fresh=True)
+            next_page = request.args.get("next") 
+            print('current_user',current_user.is_authenticated)
+            session['id'] = user.id
             return redirect(next_page) if next_page else redirect(url_for("users.home"))
         else:
               flash('Please check your login details and try again.','danger') 
     return render_template("login.html", title="Login", form=form)
 
+ 
+
 
 @auth.route("/logout")
 def logout():  
+    session.pop('id', None)
     logout_user() 
+   
     return redirect(url_for('auth.index'))
 
 @auth.route("/signup")

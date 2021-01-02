@@ -1,15 +1,142 @@
 {% extends "layout.html" %}
+{% set active_page = "home" %}
 {% block content %} 
-    {% for post in posts %}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted }}</small>
+
+ 
+
+    <div class="container-fluid">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a>AMS</a></li>
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="mb-0">
+                    Your daily attendanece status . {{user.id}} --{{user.name}}
+                    {% if user.is_face_uiid_configured() %}   
+                    <code>You have not configure the face recoginzation, Configure it now</code> 
+                    {% endif %}
+                </p>
             </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
-          </div>
-        </article>
-    {% endfor %}
+        </div>
+        <div class="content-section" style="height: 62vh;" > 
+            <!-- {% if user.is_face_uiid_configured() %}             
+            <h3>You have configurered your face recoginzation</h3>
+            {% else %}
+            <a type="button" class="btn btn-primary" href="{{ url_for('users.face_config') }}">Configure Now</a>
+            {% endif %} -->
+
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                  
+                    {% if user.is_face_uiid_configured() %}             
+                    <div class="row align-items-center mb-8 aos-init aos-animate" data-aos="fade-up">
+                        <div class="col-4 col-lg-5">                      
+                        
+                          <img src="{{ url_for('static', filename='images/configured.svg') }}" alt="..." class="img-fluid">
+          
+                        </div>
+                        <div class="col-8 col-lg-7">
+                          
+                          <!-- Heading -->
+                          <h3 class="font-weight-bold mb-2">
+                            Configured 
+                          </h3>
+          
+                          <!-- Text -->
+                          <p class="text-gray-700 mb-0">
+                            You have valid face recoginzation configuration.
+                          </p>
+          
+                        </div>
+                      </div> 
+
+                      <div class="row align-items-center mb-8 aos-init aos-animate" data-aos="fade-up">
+                        <div class="col-4 col-lg-5">
+                          
+                          <!-- Image -->
+                          <img src="{{ url_for('static', filename='images/attendance.png') }}" alt="..." class="img-fluid">
+          
+                        </div>
+                        <div class="col-8 col-lg-7">
+
+                            <div class="card"> 
+                                <div class="card-body">
+                                  <h3 class="card-title font-weight-bold mb-2">Attendanece</h3>
+                                  <p class="card-text">If you haven't marked your today's attendanece , Then do it now.</p>
+                               <a type="button" class="btn btn-primary"  href="{{ url_for('users.attandence') }}">Attendanece</a>
+                                </div>
+                              </div>
+                           
+                        </div>
+                      </div>  
+
+
+                    {% else %}
+                    <div class="row align-items-center mb-8 aos-init aos-animate" data-aos="fade-up">
+                        <div class="col-4 col-lg-5">                      
+                        
+                          <img  src="{{ url_for('static', filename='images/config_pendding.png') }}" alt="..." class="img-fluid">
+          
+                        </div>
+                        <div class="col-8 col-lg-7">
+                          
+                          <!-- Heading -->
+                          <h3 class="font-weight-bold mb-2">
+                            Configured Pendding
+                          </h3>
+          
+                          <!-- Text -->
+                          <p class="text-gray-700 mb-0">
+                             Configure you face recoginzation picture, Click on config now button 
+                            <code>Press Key "Q" in keyboard to proceed to save the your Picture</code> 
+                          </p>
+                          <a type="button" class="btn btn-primary" href="{{ url_for('users.face_config') }}">Configure Now</a>
+          
+                        </div>
+                      </div> 
+
+                      <div class="row align-items-center mb-8 aos-init aos-animate" data-aos="fade-up">
+                        <div class="col-4 col-lg-5">
+                          
+                          <!-- Image -->
+                          <img src="{{ url_for('static', filename='images/attendance.png') }}" alt="..." class="img-fluid">
+          
+                        </div>
+                        <div class="col-8 col-lg-7">
+                          
+                          <!-- Heading -->
+                          <h3 class="font-weight-bold mb-2">
+                            Attendanece 
+                          </h3>
+          
+                          <!-- Text -->
+                          <p class="text-gray-700 mb-0">
+                            You haven't configure your face recoginzation picture, first configure that than choose to mark attendance.
+                          </p>
+          
+                        </div>
+                      </div>  
+
+                    {% endif %}
+
+               
+      
+               
+              
+      
+      
+                </div>
+                 
+              </div>
+        </div>
+        
+        <!-- <div class="card mb-4"><div class="card-body text-center">It's secure </div></div> -->
+    </div>
+     
+         
+ 
+         
+ 
 {% endblock content %}

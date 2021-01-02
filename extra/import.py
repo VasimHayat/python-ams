@@ -43,7 +43,7 @@ class EOStudent(db.Model):
     password = db.Column(db.String(60), nullable=False)
     unique_face_byte = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(20), nullable=False, default='default.jpg')
-    is_active = db.Column(db.Boolean, nullable=False, default=True)
+    inactive = db.Column(db.Boolean, nullable=False, default=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     
     eograde_id = db.Column(db.Integer, db.ForeignKey(
@@ -84,11 +84,11 @@ def importStudent():
         f1 = open("_student.csv")
         studentReader = csv.reader(f1)
         i=0
-        for name,email,gender,dob,password,eograde_id in studentReader:
+        for id,name,email,gender,dob,password,eograde_id in studentReader:
             i = i+1
             if i==1: 
              continue
-            eoStudent = EOStudent(name=name,email=email,gender=gender,dob=dob,password=password,eograde_id=eograde_id)
+            eoStudent = EOStudent(id =id,name=name,email=email,gender=gender,dob=dob,password=password,eograde_id=eograde_id)
             db.session.add(eoStudent)
         db.session.commit()
      
@@ -97,20 +97,20 @@ def importAdminUser():
         f1 = open("_admin.csv")
         adminReader = csv.reader(f1)
         i=0
-        for username,email,password in adminReader:
+        for id, username,email,password in adminReader:
             i = i+1
             if i==1: 
              continue
-            adminUser = EOAdminUser(username=username,email=email,password=password)
+            adminUser = EOAdminUser(id = id,username=username,email=email,password=password)
             db.session.add(adminUser)
         db.session.commit()
              
     
 
 def main():    
-    #importAdminUser()
-   # importGrade()
-    importStudent()
+     #importAdminUser()
+     #importGrade()
+     importStudent()
 
 if __name__ == "__main__":
     db.create_all()

@@ -2,13 +2,16 @@
 <html>
 <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+    <!-- Bootstrap core CSS -->
+  <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="{{ url_for('static', filename='sidebar.css') }}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"> 
 
     {% if title %}
         <title>AMS - {{ title }}</title>
@@ -17,48 +20,85 @@
     {% endif %}
 </head>
 <body>
-    <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-          <a class="navbar-brand mr-4" href="/">AMS</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{{ url_for('auth.index') }}">Home</a>
-          
-            </div>
-            <!-- Navbar Right Side -->
-            <div class="navbar-nav">
-                {% if current_user.is_authenticated %} 
-                     <a class="nav-item nav-link" href="{{ url_for('users.home') }}">Home</a>
-                    <a class="nav-item nav-link" href="{{ url_for('users.profile') }}">Account</a>
-                    <a class="nav-item nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
-                {% else %}
-                    <a class="nav-item nav-link" href="{{ url_for('auth.login') }}">Login</a>
-                    <!-- <a class="nav-item nav-link" href="{{ url_for('auth.register') }}">Register</a> -->
-                {% endif %}
-              </div>
-             
+
+
+
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        {% if current_user.is_authenticated %} 
+        <div class="bg-light border-right" id="sidebar-wrapper">
+          <div class="sidebar-heading"> <img src="{{ url_for('static', filename='images/ams1.svg') }}" style="height: 50px;"></div>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action bg-light {{ 'active' if active_page == 'home' else '' }}" href="{{ url_for('users.home') }}">Dashboard</a>  
+            <a class="list-group-item list-group-item-action bg-light {{ 'active' if active_page == 'profile' else '' }}" href="{{ url_for('users.profile') }}">Profile</a>
+            <a class="list-group-item list-group-item-action bg-light">Status</a>
           </div>
         </div>
-      </nav>
-    </header>
-    <main role="main" class="container">
-      <div class="row">
-        <div class="col-md-12"> 
-          {% block content %}{% endblock %}  
-        </div>
+        {% else %}
+        <!-- TODO -->
+        {% endif %}
+       <!-- /#sidebar-wrapper -->
+    
+        <!-- Page Content -->
+        <div id="page-content-wrapper"> 
+          <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            {% if not current_user.is_authenticated %} 
+            <img src="{{ url_for('static', filename='images/ams.svg') }}" style="height: 50px;">
+            {% endif %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto mt-2 mt-lg-0"> 
+               
+                {% if current_user.is_authenticated %} 
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{current_user.name}}
+                  </a>
+               
+
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">                 
+                    <a class="dropdown-item" href="{{ url_for('users.home') }}">Home</a>
+                    <a class="dropdown-item" href="{{ url_for('users.profile') }}">Profile</a>                    
+                    <div class="dropdown-divider"></div> 
+                    <a class="dropdown-item"  href="{{ url_for('auth.logout') }}">Logout</a>                  
+                  </div>
+                </li>
+                {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </nav>
+    
       
+           <div class="container-fluid" style="height: 88vh;">
+               {% block content %}{% endblock %}  
+           </div>
+      
+        </div>
+        <!-- /#page-content-wrapper -->
+    
       </div>
-    </main>
+      <!-- /#wrapper -->
+ 
 
+ 
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script src="{{ url_for('static', filename='jquery/jquery.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.js') }}"></script>
+
+   <!-- Menu Toggle Script -->
+   <script>
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
 </body>
 </html>

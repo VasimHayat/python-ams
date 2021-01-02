@@ -1,8 +1,12 @@
 # flask
 # flask_sqlalchemy
-#flask_wtf
+# flask_wtf
 # wtforms
 # wtforms.validators
 # datetime
 # email_validator
 # flask_login
+# opencv-python
+# cmake
+# face_recognition
+# flask-session
